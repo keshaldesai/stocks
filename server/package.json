@@ -4,7 +4,8 @@
   "description": "Server for stocks app",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
   },
   "author": "Keshal Desai",
   "license": "MIT",
@@ -12,6 +13,7 @@
     "body-parser": "^1.17.2",
     "cors": "^2.8.3",
     "express": "^4.15.3",
-    "mongoose": "^4.10.4"
+    "mongoose": "^4.10.4",
+    "request": "^2.81.0"
   }
 }
