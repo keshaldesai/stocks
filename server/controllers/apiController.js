@@ -22,6 +22,9 @@ module.exports = function (app) {
 				res.json(prev);
 			}
 			data.reduce((prev, curr, ind) => {
+				if (!prev.symbol) {
+					prev.symbol = symbol;
+				}
 				const dateStamp = curr[0].split('-');
 				const year = dateStamp[0];
 				const month = dateStamp[1];

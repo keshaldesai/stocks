@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import * as actions from '../actions';
+import { connect } from 'react-redux';
 
 const data = [
 	{ name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
@@ -12,6 +14,11 @@ const data = [
 ];
 
 class Chart extends Component {
+	componentWillMount() {
+		this.props.getData('GOOG').then(() => {
+			console.log(this.props.stocks);
+		});
+	}
 	render() {
 		return (
 			<LineChart width={600} height={300} data={data}
@@ -28,4 +35,10 @@ class Chart extends Component {
 	}
 }
 
-export default Chart;
+function mapStateToProps(state) {
+	return {
+		stocks: state.stocks
+	}
+}
+
+export default connect(mapStateToProps, actions)(Chart);
