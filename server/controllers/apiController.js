@@ -21,34 +21,36 @@ module.exports = function (app) {
 			const callback = (prev) => {
 				res.json(prev);
 			}
+			const obj = { symbol, data: {} };
 			data.reduce((prev, curr, ind) => {
-				if (!prev.symbol) {
-					prev.symbol = symbol;
-				}
 				const dateStamp = curr[0].split('-');
 				const year = dateStamp[0];
 				const month = dateStamp[1];
 				const price = curr[1];
-				if (!prev[year]) {
-					prev[year] = {};
-				}
-				if (!prev[year][month]) {
-					prev[year][month] = {
+				if (!prev[year + month]) {
+					prev[year + month] = {
+						month: monthConvert(month),
+						year,
 						price,
 						count: 1
-					}
+					};
 				} else {
-					const newPrice = parseFloat(price + prev[year][month].price).toFixed(2);
-					prev[year][month] = {
-						price: newPrice,
-						count: prev[year][month].count + 1
-					}
+					prev[year + month].price = parseFloat(prev[year + month].price + price).toFixed(2);
+					prev[year + month].count = prev[year + month].count + 1;
 				}
 				if (ind === data.length - 1) {
-					callback(prev);
+					callback(obj);
 				}
 				return prev;
-			}, {})
+			}, obj.data)
 		});
 	});
+}
+
+function monthConvert(monthNum) {
+	var month = [
+		"January", "February", "March", "April", "May", "June",
+		"July", "August", "September", "October", "November", "December"
+	];
+	return month[parseInt(monthNum) - 1];
 }
