@@ -2,7 +2,7 @@ const request = require('request');
 const key = require('../config/quandlConfig.json').key;
 const errorHandler = require('../helpers/errorHandler');
 const Stocks = require('../models/stocks');
-const stockDayReducer = require('../helpers/stockDayReducer');
+const stockDayReducer = require('../helpers/stockDataReducer');
 
 //name: month, stocksym: avgmoprice, stocksym: avgmoprice2
 
@@ -39,28 +39,7 @@ module.exports = function (app) {
 						return res.json(newEntry);
 					});
 				}
-				data.reduce((prev, curr, ind) => {
-					const ticker = curr[0];
-					const dateStamp = curr[1].split('-');
-					const timeStamp = `${dateStamp[0]}-${dateStamp[1]}`;
-					const price = parseFloat(curr[2]);
-					if (!prev[timeStamp]) {
-						prev[timeStamp] = {}
-					}
-					if (!prev[timeStamp][ticker]) {
-						prev[timeStamp][ticker] = {
-							price,
-							count: 1
-						}
-					} else {
-						prev[timeStamp][ticker].price = (parseFloat(prev[timeStamp][ticker].price) + price).toFixed(2);
-						prev[timeStamp][ticker].count = prev[timeStamp][ticker].count + 1;
-					}
-					if (ind === data.length - 1) {
-						callback(prev);
-					}
-					return prev;
-				}, {})
+				stockDayReducer(data, callback)
 			});
 		};
 		Stocks.findOne({ stockDay }, (err, storedData) => {
