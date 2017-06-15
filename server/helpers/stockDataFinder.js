@@ -1,5 +1,5 @@
 const key = require('../config/quandlConfig.json').key;
-const stockDataReducer = require('.stockDataReducer');
+const stockDataReducer = require('./stockDataReducer');
 const request = require('request');
 const Stocks = require('../models/stocks');
 const errorHandler = require('./errorHandler');
