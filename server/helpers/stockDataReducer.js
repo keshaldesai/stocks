@@ -5,13 +5,13 @@ module.exports = function (data, callback) {
 		const timeStamp = `${dateStamp[0]}-${dateStamp[1]}`;
 		const price = parseFloat(curr[2]);
 		if (!prev[timeStamp]) {
-			prev[timeStamp] = {}
+			prev[timeStamp] = {};
 		}
 		if (!prev[timeStamp][ticker]) {
 			prev[timeStamp][ticker] = {
 				price,
 				count: 1
-			}
+			};
 		} else {
 			prev[timeStamp][ticker].price = (parseFloat(prev[timeStamp][ticker].price) + price).toFixed(2);
 			prev[timeStamp][ticker].count = prev[timeStamp][ticker].count + 1;
@@ -20,5 +20,5 @@ module.exports = function (data, callback) {
 			callback(prev);
 		}
 		return prev;
-	}, {})
-}
+	}, {});
+};
