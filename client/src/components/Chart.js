@@ -1,43 +1,71 @@
 import React, { Component } from 'react';
+import { Loader } from 'semantic-ui-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import * as actions from '../actions';
 import { connect } from 'react-redux';
 
-const data = [
-	{ name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
-	{ name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
-	{ name: 'Page C', uv: 2000, pv: 9800, amt: 2290 },
-	{ name: 'Page D', uv: 2780, pv: 3908, amt: 2000 },
-	{ name: 'Page E', uv: 1890, pv: 4800, amt: 2181 },
-	{ name: 'Page F', uv: 2390, pv: 3800, amt: 2500 },
-	{ name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
-];
+const colors = ['#F44336', '#FFC107', '#E91E63', '#009688', '#9C27B0', '#2196F3', '#673AB7', '#3F51B5'];
+
+function convertMonth(monthNum) {
+	var month = [
+		"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+		"JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+	];
+	return month[parseInt(monthNum) - 1];
+}
 
 class Chart extends Component {
 	componentWillMount() {
-		this.props.getData('GOOG').then(() => {
-			console.log(this.props.stocks);
+		this.props.getData().then(() => {
 		});
 	}
-	render() {
+	renderChart() {
+		const { data, symbols } = this.props;
+		if (!data) {
+			return <Loader active />
+		}
+		let newData = [];
+		Object.keys(data).map((time, outInd, outArr) => {
+			const dateInfo = time.split('-');
+			const name = `${convertMonth(dateInfo[1])} '${dateInfo[0][2]}${dateInfo[0][3]}`;
+			const obj = { name };
+			Object.keys(data[time]).map((symbol, inInd, inArr) => {
+				obj[symbol] = parseFloat((data[time][symbol].price / data[time][symbol].count).toFixed(2));
+				if (outInd === outArr.length - 1 && inInd === inArr.length - 1) {
+					newData.push(obj);
+				}
+			});
+			newData.push(obj);
+		});
+		const lines = symbols.map((symbol, ind) => {
+			return <Line key={symbol} type="monotone" dataKey={symbol} stroke={colors[ind % colors.length]} />
+		});
 		return (
-			<LineChart width={600} height={300} data={data}
+			<LineChart width={700} height={300} data={newData}
 				margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-				<XAxis dataKey="name" />
-				<YAxis />
+				<XAxis dataKey="name" stroke="#B9BDBE" />
+				<YAxis stroke="#B9BDBE" />
 				<CartesianGrid strokeDasharray="3 3" />
 				<Tooltip />
 				<Legend />
-				<Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-				<Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+				{lines}
 			</LineChart>
+		);
+	}
+
+	render() {
+		return (
+			<div>
+				{this.renderChart()}
+			</div>
 		);
 	}
 }
 
 function mapStateToProps(state) {
 	return {
-		stocks: state.stocks
+		data: state.stocks.data,
+		symbols: state.stocks.symbols
 	}
 }
 

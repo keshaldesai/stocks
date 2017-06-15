@@ -1,56 +1,85 @@
 const request = require('request');
 const key = require('../config/quandlConfig.json').key;
 const errorHandler = require('../helpers/errorHandler');
+const Stocks = require('../models/stocks');
+const stockDayReducer = require('../helpers/stockDayReducer');
+
+//name: month, stocksym: avgmoprice, stocksym: avgmoprice2
 
 module.exports = function (app) {
 	//API route handlers
+
 	//get stock data
-	app.get('/api/stock/:symbol', function (req, res) {
-		const { symbol } = req.params;
+	app.get('/api/default', function (req, res) {
 		const date = new Date();
-		const year = date.getUTCFullYear() - 1;
-		const uri = `https://www.quandl.com/api/v3/datatables/WIKI/PRICES.json?date.gte=${year}0601&ticker=${symbol}&qopts.columns=date,open&api_key=${key}`;
-		request.get(uri, (err, response, body) => {
+		const stockDay = '' + date.getUTCFullYear() + date.getUTCDate();
+		const callback = () => {
+			const defaultSymbols = ["GOOG", "AAPL", "FB", "MMM", "YHOO"];
+			const lastYear = date.getUTCFullYear() - 1;
+			const symbols = defaultSymbols.join(',');
+			const uri = `https://www.quandl.com/api/v3/datatables/WIKI/PRICES.json?date.gte=${lastYear}0601&ticker=${symbols}&qopts.columns=ticker,date,open&api_key=${key}`;
+			request.get(uri, (err, response, body) => {
+				if (err) {
+					return errorHandler(err, res, response.statusCode);
+				}
+				const { data } = JSON.parse(body).datatable;
+				if (data.length === 0) {
+					return errorHandler(err, res, 404);
+				}
+				const callback = (prev) => {
+					const newStockDay = new Stocks({
+						stockDay,
+						symbols: defaultSymbols,
+						data: prev
+					});
+					newStockDay.save((err, newEntry) => {
+						if (err) {
+							return errorHandler(err, res, 500);
+						}
+						return res.json(newEntry);
+					});
+				}
+				data.reduce((prev, curr, ind) => {
+					const ticker = curr[0];
+					const dateStamp = curr[1].split('-');
+					const timeStamp = `${dateStamp[0]}-${dateStamp[1]}`;
+					const price = parseFloat(curr[2]);
+					if (!prev[timeStamp]) {
+						prev[timeStamp] = {}
+					}
+					if (!prev[timeStamp][ticker]) {
+						prev[timeStamp][ticker] = {
+							price,
+							count: 1
+						}
+					} else {
+						prev[timeStamp][ticker].price = (parseFloat(prev[timeStamp][ticker].price) + price).toFixed(2);
+						prev[timeStamp][ticker].count = prev[timeStamp][ticker].count + 1;
+					}
+					if (ind === data.length - 1) {
+						callback(prev);
+					}
+					return prev;
+				}, {})
+			});
+		};
+		Stocks.findOne({ stockDay }, (err, storedData) => {
 			if (err) {
-				return errorHandler(err, res, response.statusCode);
+				return errorHandler(err, res, 500);
 			}
-			const { data } = JSON.parse(body).datatable;
-			if (data.length === 0) {
-				return errorHandler(err, res, 404);
+			if (!storedData) {
+				return callback();
 			}
-			const callback = (prev) => {
-				res.json(prev);
-			}
-			const obj = { symbol, data: {} };
-			data.reduce((prev, curr, ind) => {
-				const dateStamp = curr[0].split('-');
-				const year = dateStamp[0];
-				const month = dateStamp[1];
-				const price = curr[1];
-				if (!prev[year + month]) {
-					prev[year + month] = {
-						month: monthConvert(month),
-						year,
-						price,
-						count: 1
-					};
-				} else {
-					prev[year + month].price = parseFloat(prev[year + month].price + price).toFixed(2);
-					prev[year + month].count = prev[year + month].count + 1;
-				}
-				if (ind === data.length - 1) {
-					callback(obj);
-				}
-				return prev;
-			}, obj.data)
-		});
+			return res.json(storedData);
+		})
 	});
+
 }
 
-function monthConvert(monthNum) {
+function convertMonth(monthNum) {
 	var month = [
-		"January", "February", "March", "April", "May", "June",
-		"July", "August", "September", "October", "November", "December"
+		"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+		"JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
 	];
 	return month[parseInt(monthNum) - 1];
 }
