@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 var Stocks = mongoose.model("Stocks", {
   stockDay: String,
-  symbols: Array,
+  symbols: String,
   data: {}
 });
 

@@ -4,7 +4,11 @@ import { Card, Icon } from "semantic-ui-react";
 
 class Cards extends Component {
   renderCards() {
-    return this.props.symbols.map(symbol => {
+    const symbols = this.props;
+    if (symbols.length === 0) {
+      return <div />;
+    }
+    return this.props.symbols.split(",").map(symbol => {
       return (
         <Card
           key={symbol}

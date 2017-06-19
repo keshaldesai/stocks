@@ -23,23 +23,20 @@ const colors = [
   "#3F51B5"
 ];
 
-function convertMonth(monthNum) {
-  var month = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC"
-  ];
-  return month[parseInt(monthNum, 10) - 1];
-}
+const months = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC"
+];
 
 class Chart extends Component {
   componentWillMount() {
@@ -51,23 +48,34 @@ class Chart extends Component {
       return <Loader active />;
     }
     let newData = [];
-    Object.keys(data).forEach((time, outInd, outArr) => {
-      const dateInfo = time.split("-");
-      const name = `${convertMonth(
-        dateInfo[1]
-      )} '${dateInfo[0][2]}${dateInfo[0][3]}`;
-      const obj = { name };
-      Object.keys(data[time]).forEach((symbol, inInd, inArr) => {
-        obj[symbol] = parseFloat(
-          (data[time][symbol].price / data[time][symbol].count).toFixed(2)
-        );
-        if (outInd === outArr.length - 1 && inInd === inArr.length - 1) {
-          newData.push(obj);
-        }
+    const obj = {};
+    const callback = finalObj => {
+      newData = Object.keys(finalObj).map((stockDate, ind, arr) => {
+        const monthData = finalObj[stockDate];
+        const date = stockDate.split("-");
+        const month = months[+date[1] - 1];
+        const year = date[0][2] + date[0][3];
+        return {
+          name: `${month} '${year}`,
+          ...monthData
+        };
       });
-      newData.push(obj);
+    };
+    Object.keys(data).forEach((symbol, outInd, outArr) => {
+      Object.keys(data[symbol]).reduce((prev, curr, inInd, inArr) => {
+        const dateStamp = inArr[inInd];
+        if (!obj[dateStamp]) {
+          obj[dateStamp] = {};
+        }
+        obj[dateStamp][symbol] = +(data[symbol][dateStamp].price /
+          data[symbol][dateStamp].count).toFixed(2);
+        if (outInd === outArr.length - 1 && inInd === inArr.length - 1) {
+          callback(obj);
+        }
+        return obj;
+      }, obj);
     });
-    const lines = symbols.map((symbol, ind) => {
+    const lines = symbols.split(",").map((symbol, ind) => {
       return (
         <Line
           key={symbol}
