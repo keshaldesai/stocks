@@ -11,7 +11,7 @@ function convertMonth(monthNum) {
 		"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 		"JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
 	];
-	return month[parseInt(monthNum) - 1];
+	return month[parseInt(monthNum, 10) - 1];
 }
 
 class Chart extends Component {
@@ -25,11 +25,11 @@ class Chart extends Component {
 			return <Loader active />
 		}
 		let newData = [];
-		Object.keys(data).map((time, outInd, outArr) => {
+		Object.keys(data).forEach((time, outInd, outArr) => {
 			const dateInfo = time.split('-');
 			const name = `${convertMonth(dateInfo[1])} '${dateInfo[0][2]}${dateInfo[0][3]}`;
 			const obj = { name };
-			Object.keys(data[time]).map((symbol, inInd, inArr) => {
+			Object.keys(data[time]).forEach((symbol, inInd, inArr) => {
 				obj[symbol] = parseFloat((data[time][symbol].price / data[time][symbol].count).toFixed(2));
 				if (outInd === outArr.length - 1 && inInd === inArr.length - 1) {
 					newData.push(obj);
