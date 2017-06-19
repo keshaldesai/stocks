@@ -1,5 +1,5 @@
 module.exports = {
-	DEFAULT: 'DEFAULT',
-	ADD: 'ADD',
-	REMOVE: 'REMOVE'
+  DEFAULT: "DEFAULT",
+  ADD: "ADD",
+  REMOVE: "REMOVE"
 };

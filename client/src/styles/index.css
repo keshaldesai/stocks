@@ -1,15 +1,15 @@
 body {
-    background-color: #2A2C2B;
+  background-color: #2A2C2B;
 }
 
 .recharts-wrapper {
-    margin: 20px auto;
+  margin: 20px auto;
 }
 
 .cards {
-    margin: 20px auto;
+  margin: 20px auto;
 }
 
 .recharts-legend-item-text {
-    color: #B9BDBE;
+  color: #B9BDBE;
 }
