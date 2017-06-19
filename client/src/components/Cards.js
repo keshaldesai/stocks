@@ -8,7 +8,7 @@ class Cards extends Component {
     if (symbols.length === 0) {
       return <div />;
     }
-    return this.props.symbols.split(",").map(symbol => {
+    return this.props.symbols.map(symbol => {
       return (
         <Card
           key={symbol}

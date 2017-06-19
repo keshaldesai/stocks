@@ -50,7 +50,7 @@ class Chart extends Component {
     let newData = [];
     const obj = {};
     const callback = finalObj => {
-      newData = Object.keys(finalObj).map((stockDate, ind, arr) => {
+      newData = Object.keys(finalObj).sort().map((stockDate, ind, arr) => {
         const monthData = finalObj[stockDate];
         const date = stockDate.split("-");
         const month = months[+date[1] - 1];
@@ -75,7 +75,7 @@ class Chart extends Component {
         return obj;
       }, obj);
     });
-    const lines = symbols.split(",").map((symbol, ind) => {
+    const lines = symbols.map((symbol, ind) => {
       return (
         <Line
           key={symbol}

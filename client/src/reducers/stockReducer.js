@@ -1,6 +1,6 @@
 import { GET_DATA } from "../actions/types";
 
-const INITIAL_STATE = { symbols: "", data: [] };
+const INITIAL_STATE = { symbols: [], data: [] };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {

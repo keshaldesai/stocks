@@ -9,7 +9,7 @@ module.exports = function(app) {
     const date = new Date();
     const stockDay = "" + date.getUTCFullYear() + date.getUTCDate();
     const callback = () => {
-      const defaultSymbols = "AAPL,FB,MMM,YHOO";
+      const defaultSymbols = ["AAPL", "FB", "MMM", "YHOO"];
       return stockDataFinder(defaultSymbols, res, types.DEFAULT);
     };
     Stocks.findOne({ stockDay }, (err, storedData) => {
@@ -28,7 +28,7 @@ module.exports = function(app) {
     const stockDay = "" + date.getUTCFullYear() + date.getUTCDate();
     const callback = storedData => {
       const { symbol } = req.body;
-      return stockDataFinder(symbol, res, types.ADD, storedData);
+      return stockDataFinder([symbol], res, types.ADD, storedData);
     };
     Stocks.findOne({ stockDay }, (err, storedData) => {
       if (err) {

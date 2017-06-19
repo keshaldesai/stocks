@@ -6,10 +6,11 @@ const errorHandler = require("./errorHandler");
 const types = require("../controllers/types");
 
 module.exports = function(symbols, res, type, storedData) {
+  const uriSymbols = symbols.length === 1 ? symbols[0] : symbols.join(",");
   const date = new Date();
   const stockDay = "" + date.getUTCFullYear() + date.getUTCDate();
   const lastYear = date.getUTCFullYear() - 1;
-  const uri = `https://www.quandl.com/api/v3/datatables/WIKI/PRICES.json?date.gte=${lastYear}0601&ticker=${symbols}&qopts.columns=ticker,date,open&api_key=${key}`;
+  const uri = `https://www.quandl.com/api/v3/datatables/WIKI/PRICES.json?date.gte=${lastYear}0601&ticker=${uriSymbols}&qopts.columns=ticker,date,open&api_key=${key}`;
   request.get(uri, (err, response, body) => {
     if (err) {
       return errorHandler(err, res, response.statusCode);
@@ -35,8 +36,9 @@ module.exports = function(symbols, res, type, storedData) {
           return;
         }
         case types.ADD: {
-          const newData = Object.assign({}, storedData, prev);
+          const newData = Object.assign({}, storedData.data, prev);
           storedData.data = newData;
+          storedData.symbols.push(symbols[0]);
           storedData.save((err, newEntry) => {
             if (err) {
               return errorHandler(err, res, 500);
