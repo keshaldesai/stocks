@@ -5,7 +5,7 @@ const Stocks = require("../models/stocks");
 const errorHandler = require("./errorHandler");
 const types = require("../controllers/types");
 
-module.exports = function(symbols, res, type, storedData) {
+module.exports = (symbols, res, type, storedData) => {
   const uriSymbols = symbols.length === 1 ? symbols[0] : symbols.join(",");
   const date = new Date();
   const stockDay = "" + date.getUTCFullYear() + date.getUTCDate();
@@ -27,28 +27,24 @@ module.exports = function(symbols, res, type, storedData) {
             symbols,
             data: prev
           });
-          newStockDay.save((err, newEntry) => {
+          return newStockDay.save((err, newEntry) => {
             if (err) {
               return errorHandler(err, res, 500);
             }
             return res.json(newEntry);
           });
-          return;
         }
         case types.ADD: {
           const newData = Object.assign({}, storedData.data, prev);
           storedData.data = newData;
           storedData.symbols.push(symbols[0]);
-          storedData.save((err, newEntry) => {
+          return storedData.save((err, newEntry) => {
             if (err) {
               return errorHandler(err, res, 500);
             }
             return res.json(newEntry);
           });
-          return;
         }
-        case types.REMOVE:
-          return;
         default:
           return;
       }
