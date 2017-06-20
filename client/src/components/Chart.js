@@ -40,7 +40,9 @@ const months = [
 
 class Chart extends Component {
   componentWillMount() {
-    this.props.getData().then(() => {});
+    this.props.getData().then(() => {
+      this.props.connectSocket();
+    });
   }
   renderChart() {
     const { data, symbols } = this.props;

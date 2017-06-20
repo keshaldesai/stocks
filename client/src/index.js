@@ -7,8 +7,12 @@ import registerServiceWorker from "./registerServiceWorker";
 import "./styles/index.css";
 import reducers from "./reducers";
 import reduxPromise from "redux-promise";
+import socketMiddleware from "./middleware/socketMiddleware";
 
-const createStoreWithMiddleware = applyMiddleware(reduxPromise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(
+  reduxPromise,
+  socketMiddleware
+)(createStore);
 
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
