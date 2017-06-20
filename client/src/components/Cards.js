@@ -4,15 +4,16 @@ import { Card, Icon } from "semantic-ui-react";
 
 class Cards extends Component {
   renderCards() {
-    const symbols = this.props;
+    const { symbols } = this.props;
     if (symbols.length === 0) {
       return <div />;
     }
-    return this.props.symbols.map(symbol => {
+    return symbols.map(symbol => {
       return (
         <Card
           key={symbol}
           href={`https://www.google.com/finance?q=NASDAQ:${symbol}`}
+          target="_blank"
           header={symbol}
           meta="Stock"
         />
@@ -23,13 +24,6 @@ class Cards extends Component {
     return (
       <Card.Group itemsPerRow={4}>
         {this.renderCards()}
-        <Card
-          onClick={() => {
-            console.log("clicked");
-          }}
-        >
-          <Icon name="home" size="massive" />
-        </Card>
       </Card.Group>
     );
   }
