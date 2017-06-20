@@ -22,9 +22,11 @@ class Cards extends Component {
   }
   render() {
     return (
-      <Card.Group itemsPerRow={4}>
-        {this.renderCards()}
-      </Card.Group>
+      <div className="cards">
+        <Card.Group itemsPerRow={4}>
+          {this.renderCards()}
+        </Card.Group>
+      </div>
     );
   }
 }

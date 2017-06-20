@@ -17,7 +17,7 @@ module.exports = (symbols, res, type, storedData, wss) => {
     }
     const { data } = JSON.parse(body).datatable;
     if (data.length === 0) {
-      return errorHandler(err, res, 404);
+      return res.status(404).end();
     }
     const callback = prev => {
       switch (type) {

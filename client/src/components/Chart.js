@@ -88,19 +88,21 @@ class Chart extends Component {
       );
     });
     return (
-      <LineChart
-        width={700}
-        height={300}
-        data={newData}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      >
-        <XAxis dataKey="name" stroke="#B9BDBE" />
-        <YAxis stroke="#B9BDBE" />
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Legend />
-        {lines}
-      </LineChart>
+      <div className="chart">
+        <LineChart
+          width={700}
+          height={300}
+          data={newData}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <XAxis dataKey="name" stroke="#B9BDBE" />
+          <YAxis stroke="#B9BDBE" />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Tooltip />
+          <Legend />
+          {lines}
+        </LineChart>
+      </div>
     );
   }
 
