@@ -5,7 +5,7 @@ const Stocks = require("../models/stocks");
 const errorHandler = require("./errorHandler");
 const types = require("../controllers/types");
 
-module.exports = (symbols, res, type, storedData) => {
+module.exports = (symbols, res, type, storedData, wss) => {
   const uriSymbols = symbols.length === 1 ? symbols[0] : symbols.join(",");
   const date = new Date();
   const stockDay = "" + date.getUTCFullYear() + date.getUTCDate();
@@ -42,7 +42,8 @@ module.exports = (symbols, res, type, storedData) => {
             if (err) {
               return errorHandler(err, res, 500);
             }
-            return res.json(newEntry);
+            res.json(newEntry);
+            return wss.broadcast(newEntry);
           });
         }
         default:

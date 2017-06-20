@@ -4,13 +4,19 @@ const Stocks = require("../models/stocks");
 const types = require("./types");
 const dbLookup = require("../helpers/dbLookup");
 
-module.exports = app => {
+module.exports = (app, wss) => {
+  wss.broadcast = function broadcast(data) {
+    wss.clients.forEach(function each(client) {
+      client.send(JSON.stringify(data));
+    });
+  };
+
   //get stock data
   app.get("/api/default", (req, res) => {
     const callback = storedData => {
       if (!storedData) {
         const defaultSymbols = ["AAPL", "FB", "MMM", "YHOO"];
-        return stockDataFinder(defaultSymbols, res, types.DEFAULT);
+        return stockDataFinder(defaultSymbols, res, types.DEFAULT, null, wss);
       }
       return res.json(storedData);
     };
@@ -20,7 +26,7 @@ module.exports = app => {
   app.post("/api/add", (req, res) => {
     const callback = storedData => {
       const { symbol } = req.body;
-      return stockDataFinder([symbol], res, types.ADD, storedData);
+      return stockDataFinder([symbol], res, types.ADD, storedData, wss);
     };
     return dbLookup(res, callback);
   });
@@ -43,7 +49,8 @@ module.exports = app => {
           if (err) {
             return errorHandler(err, res, 500);
           }
-          return res.json(newEntry);
+          res.json(newEntry);
+          wss.broadcast(newEntry);
         }
       );
     };

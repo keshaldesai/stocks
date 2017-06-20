@@ -1,5 +1,10 @@
 const express = require("express");
+const http = require("http");
+const WebSocket = require("ws");
 const app = express();
+
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
 const apiControlller = require("./controllers/apiController");
 const setupControlller = require("./controllers/setupController");
@@ -16,6 +21,6 @@ mongoose.connect(
 setupControlller(app);
 
 //general API handler
-apiControlller(app);
+apiControlller(app, wss);
 
-app.listen(8000, console.log("Listening on port 8000"));
+server.listen(8000, console.log("Listening on port 8000"));
