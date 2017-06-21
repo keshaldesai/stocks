@@ -1,14 +1,19 @@
 body {
   background-color: #2A2C2B;
   font-family: 'Montserrat', sans-serif;
+  text-align: center;
 }
 
 .app {
-  margin: 16px 8px;
+  margin: 8px auto;
+}
+
+.add {
+  margin: 8px auto;
 }
 
 .recharts-wrapper {
-  margin: 16px auto;
+  margin: 0 auto;
 }
 
 .recharts-legend-item-text {
@@ -22,4 +27,8 @@ body {
 .card .x {
   cursor: pointer;
   float: right;
+}
+
+.ui.cards {
+  margin: auto;
 }

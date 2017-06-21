@@ -18,7 +18,11 @@ module.exports = (symbols, res, type, storedData, wss) => {
     if (!body) {
       return res.status(404).end();
     }
-    const { data } = JSON.parse(body).datatable;
+    const { datatable } = JSON.parse(body);
+    if (!datatable) {
+      return res.status(404).end();
+    }
+    const { data } = datatable;
     if (data.length === 0) {
       return res.status(404).end();
     }

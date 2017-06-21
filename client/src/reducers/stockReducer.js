@@ -5,6 +5,9 @@ const INITIAL_STATE = { symbols: [], data: [], error: "" };
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case GET_DATA:
+      if (!action.payload.data) {
+        return INITIAL_STATE;
+      }
       const { symbols, data } = action.payload.data;
       return { ...state, symbols, data };
     case DATA_UPDATE:

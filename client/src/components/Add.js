@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Message } from "semantic-ui-react";
+import { Form, Message, Grid } from "semantic-ui-react";
 import { addStock } from "../actions";
 import { connect } from "react-redux";
 
@@ -7,7 +7,8 @@ class Add extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      symbol: ""
+      symbol: "",
+      error: ""
     };
   }
 
@@ -16,27 +17,49 @@ class Add extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { symbol } = this.state;
-    this.props.addStock(symbol);
+    const cleanSymbol = symbol.trim().toUpperCase();
+    const checkSymbol = this.props.symbols.find(one => {
+      return cleanSymbol === one;
+    });
+    if (checkSymbol) {
+      return this.setState({
+        symbolError: "Symbol already added"
+      });
+    } else {
+      this.setState({
+        symbolError: ""
+      });
+      return this.props.addStock(cleanSymbol);
+    }
   };
 
   render() {
-    const { symbol } = this.state;
-    const { error } = this.props;
-    const errorTest = error ? { error: true } : { error: false };
+    const { symbol, symbolError } = this.state;
+    const { errorData } = this.props;
     return (
       <div className="add">
-        <Form onSubmit={this.handleSubmit} {...errorTest}>
-          <Form.Group inline>
-            <Form.Input
-              placeholder="Stock ticker"
-              name="symbol"
-              onChange={this.handleChange}
-              value={symbol}
-            />
-            <Message error content={error} />
-            <Form.Button content="Add new stock" />
-          </Form.Group>
-        </Form>
+        <Grid columns={16}>
+          <Grid.Column width={5} />
+          <Grid.Column width={6}>
+            <Form
+              onSubmit={this.handleSubmit}
+              error={symbolError || errorData ? true : false}
+            >
+              <Form.Group>
+                <Form.Input
+                  placeholder="Stock ticker"
+                  name="symbol"
+                  onChange={this.handleChange}
+                  value={symbol}
+                  width="10"
+                />
+                <Form.Button content="Add stock" width="6" />
+              </Form.Group>
+              <Message error content={symbolError || errorData} />
+            </Form>
+          </Grid.Column>
+          <Grid.Column width={5} />
+        </Grid>
       </div>
     );
   }
@@ -44,7 +67,8 @@ class Add extends Component {
 
 function mapStateToProps(state) {
   return {
-    error: state.stocks.error
+    errorData: state.stocks.error,
+    symbols: state.stocks.symbols
   };
 }
 

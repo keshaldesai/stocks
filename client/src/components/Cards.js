@@ -4,9 +4,6 @@ import { Card, Icon } from "semantic-ui-react";
 import { removeStock } from "../actions";
 
 class Cards extends Component {
-  handleClick(e, data) {
-    console.log(e.target.value);
-  }
   renderCards() {
     const { symbols } = this.props;
     if (symbols.length === 0) {
@@ -14,7 +11,7 @@ class Cards extends Component {
     }
     return symbols.map(symbol => {
       return (
-        <Card key={symbol}>
+        <Card key={symbol} raised centered>
           <Card.Content>
             <Card.Description
               href={`https://www.google.com/finance?q=NASDAQ:${symbol}`}
@@ -39,7 +36,7 @@ class Cards extends Component {
   render() {
     return (
       <div className="cards">
-        <Card.Group stackable={true}>
+        <Card.Group>
           {this.renderCards()}
         </Card.Group>
       </div>
