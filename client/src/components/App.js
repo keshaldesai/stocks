@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Chart from "./Chart";
-import Cards from "./Cards";
+import StockList from "./StockList";
 import Add from "./Add";
 import { Container } from "semantic-ui-react";
 
@@ -10,7 +10,7 @@ class App extends Component {
       <Container className="app">
         <Chart />
         <Add />
-        <Cards />
+        <StockList />
       </Container>
     );
   }

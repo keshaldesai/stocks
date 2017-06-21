@@ -48,7 +48,7 @@ class Chart extends Component {
     const { data, symbols } = this.props;
     if (!data) {
       return (
-        <Segment>No data available, feel free to add a stock above.</Segment>
+        <Segment>No data available, feel free to add a stock below.</Segment>
       );
     }
     let newData = [];
