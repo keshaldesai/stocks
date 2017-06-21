@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Message, Grid } from "semantic-ui-react";
+import { Form, Message } from "semantic-ui-react";
 import { addStock } from "../actions";
 import { connect } from "react-redux";
 
@@ -38,28 +38,22 @@ class Add extends Component {
     const { errorData } = this.props;
     return (
       <div className="add">
-        <Grid columns={16}>
-          <Grid.Column width={5} />
-          <Grid.Column width={6}>
-            <Form
-              onSubmit={this.handleSubmit}
-              error={symbolError || errorData ? true : false}
-            >
-              <Form.Group>
-                <Form.Input
-                  placeholder="Stock ticker"
-                  name="symbol"
-                  onChange={this.handleChange}
-                  value={symbol}
-                  width="10"
-                />
-                <Form.Button content="Add stock" width="6" />
-              </Form.Group>
-              <Message error content={symbolError || errorData} />
-            </Form>
-          </Grid.Column>
-          <Grid.Column width={5} />
-        </Grid>
+        <Form
+          onSubmit={this.handleSubmit}
+          error={symbolError || errorData ? true : false}
+        >
+          <Form.Group>
+            <Form.Input
+              placeholder="Stock ticker"
+              name="symbol"
+              onChange={this.handleChange}
+              value={symbol}
+              width="10"
+            />
+            <Form.Button content="Add stock" width="6" />
+          </Form.Group>
+          <Message error content={symbolError || errorData} />
+        </Form>
       </div>
     );
   }
