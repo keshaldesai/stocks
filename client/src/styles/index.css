@@ -1,5 +1,6 @@
 body {
   background-color: #2A2C2B;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .app {
@@ -12,4 +13,13 @@ body {
 
 .recharts-legend-item-text {
   color: #B9BDBE;
+}
+
+.card {
+  font-weight: bolder;
+}
+
+.card .x {
+  cursor: pointer;
+  float: right;
 }

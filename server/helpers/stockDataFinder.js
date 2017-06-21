@@ -15,6 +15,9 @@ module.exports = (symbols, res, type, storedData, wss) => {
     if (err) {
       return errorHandler(err, res, response.statusCode);
     }
+    if (!body) {
+      return res.status(404).end();
+    }
     const { data } = JSON.parse(body).datatable;
     if (data.length === 0) {
       return res.status(404).end();

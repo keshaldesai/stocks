@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Loader } from "semantic-ui-react";
+import { Segment } from "semantic-ui-react";
 import {
   LineChart,
   Line,
@@ -47,7 +47,9 @@ class Chart extends Component {
   renderChart() {
     const { data, symbols } = this.props;
     if (!data) {
-      return <Loader active />;
+      return (
+        <Segment>No data available, feel free to add a stock above.</Segment>
+      );
     }
     let newData = [];
     const obj = {};

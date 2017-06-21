@@ -15,7 +15,7 @@ module.exports = (app, wss) => {
   app.get("/api/default", (req, res) => {
     const callback = storedData => {
       if (!storedData) {
-        const defaultSymbols = ["AAPL", "FB", "MMM", "YHOO"];
+        const defaultSymbols = ["AAPL", "FB", "GOOG", "YHOO", "AMZN"];
         return stockDataFinder(defaultSymbols, res, types.DEFAULT, null, wss);
       }
       return res.json(storedData);
