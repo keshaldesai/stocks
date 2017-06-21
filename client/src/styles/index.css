@@ -1,34 +1,35 @@
 body {
-  background-color: #2A2C2B;
-  font-family: 'Montserrat', sans-serif;
-  text-align: center;
+    background-color: #2A2C2B;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
 }
 
-.app {
-  margin: 8px auto;
-}
-
-.add {
-  margin: 8px auto;
+.chart {
+    margin: 8px auto;
 }
 
 .recharts-wrapper {
-  margin: 0 auto;
+    margin: 0 auto;
 }
 
 .recharts-legend-item-text {
-  color: #B9BDBE;
+    color: #B9BDBE;
 }
 
-.card {
-  font-weight: bolder;
+.add {
+    margin: 8px auto;
 }
 
-.card .x {
-  cursor: pointer;
-  float: right;
+.stocklist {
+    margin: 8px auto;
+    width: 700px;
 }
 
-.ui.cards {
-  margin: auto;
+.item {
+    width: 120px;
+}
+
+.x.icon {
+    cursor: pointer;
+    padding: 0px 8px;
 }

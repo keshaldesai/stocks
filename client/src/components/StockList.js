@@ -11,10 +11,11 @@ class StockList extends Component {
     }
     return symbols.map(symbol => {
       return (
-        <List.Item key={symbol} style={{ width: "150px" }}>
+        <List.Item key={symbol}>
           <List.Content
             href={`https://www.google.com/finance?q=NASDAQ:${symbol}`}
             target="_blank"
+            style={{ color: "white" }}
           >
             {symbol}
           </List.Content>
@@ -26,6 +27,7 @@ class StockList extends Component {
             onClick={() => {
               this.props.removeStock(symbol);
             }}
+            style={{ cursor: "pointer", padding: "0px 8px" }}
           />
         </List.Item>
       );
@@ -33,8 +35,8 @@ class StockList extends Component {
   }
   render() {
     return (
-      <div className="cards">
-        <List inverted size="large" horizontal={true}>
+      <div className="stocklist">
+        <List inverted size="big" horizontal={true}>
           {this.renderCards()}
         </List>
       </div>
