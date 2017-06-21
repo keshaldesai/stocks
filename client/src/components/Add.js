@@ -20,12 +20,13 @@ class Add extends Component {
   };
 
   render() {
-    const { symbol, error } = this.state;
+    const { symbol } = this.state;
+    const { error } = this.props;
     const errorTest = error ? { error: true } : { error: false };
     return (
       <div className="add">
         <Form onSubmit={this.handleSubmit} {...errorTest}>
-          <Form.Group>
+          <Form.Group inline>
             <Form.Input
               placeholder="Stock ticker"
               name="symbol"
@@ -41,4 +42,10 @@ class Add extends Component {
   }
 }
 
-export default connect(null, { addStock })(Add);
+function mapStateToProps(state) {
+  return {
+    error: state.stocks.error
+  };
+}
+
+export default connect(mapStateToProps, { addStock })(Add);
