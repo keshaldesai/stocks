@@ -25,7 +25,7 @@ module.exports = (app, wss) => {
 
   app.post("/api/add", (req, res) => {
     const callback = storedData => {
-      const { symbol } = req.body;
+      const symbol = req.body.symbol.toUpperCase();
       return stockDataFinder([symbol], res, types.ADD, storedData, wss);
     };
     return dbLookup(res, callback);
