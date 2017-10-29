@@ -10,3 +10,7 @@ Real-time community stock tracker
 * [Redux Promise](https://www.npmjs.com/package/redux-promise)
 * [Recharts](http://recharts.org/#/en-US/)
 * [WS WebSocket](https://www.npmjs.com/package/ws)
+
+## Acknowledgments
+
+* [Quandl](https://www.quandl.com/)
